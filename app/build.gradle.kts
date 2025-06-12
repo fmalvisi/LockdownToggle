@@ -38,7 +38,21 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-
+    packagingOptions {
+        // For AndroidTest resources
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}" // Common licenses to exclude
+            excludes += "/META-INF/LICENSE.md"
+            excludes += "/META-INF/LICENSE-notice.md"
+            excludes += "/META-INF/LICENSE" // In case it's just 'LICENSE' without extension
+            excludes += "/META-INF/NOTICE"
+            excludes += "/META-INF/NOTICE.txt"
+            excludes += "/META-INF/LICENSE.txt"
+            excludes += "/META-INF/ASL2.0"
+            excludes += "META-INF/DEPENDENCIES" // Another common one
+            // Add any other specific duplicate files you encounter
+        }
+    }
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
@@ -91,4 +105,14 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("io.mockk:mockk-android:1.13.5")
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("androidx.test:rules:1.5.0")
+
+    // For intent mocking/verification (optional but very useful)
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")
+
+    // For mocking (optional, but good for isolating components)
+    androidTestImplementation("org.mockito:mockito-android:4.0.0") // Or latest version
+    androidTestImplementation("org.mockito:mockito-core:4.0.0") // Or latest version
+    androidTestImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0") // For Kotlin niceties
 }
