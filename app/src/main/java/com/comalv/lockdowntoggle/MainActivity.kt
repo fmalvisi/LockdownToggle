@@ -30,8 +30,18 @@ class MainActivity : AppCompatActivity() {
         requestAdminButton.setOnClickListener {
             val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
             intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName)
-            intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "To allow this app to lock the device down")
+            intent.putExtra(
+                DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                "To allow this app to lock the device down"
+            )
             startActivity(intent)
+
+            // Add quick tile
+            val tileServiceIntent =
+                Intent("android.service.quicksettings.action.REQUEST_QS_TILE").apply {
+                    component = ComponentName(this@MainActivity, LockdownTileService::class.java)
+                }
+            startActivity(tileServiceIntent)
         }
 
         lockNowButton.setOnClickListener {
