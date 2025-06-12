@@ -34,8 +34,8 @@
         </service>
         <activity
             android:name=".QuickLockdownActivity"
+            android:theme="@android:style/Theme.NoDisplay"
             android:exported="true"
-            android:enabled="true"
             android:label="Quick Lockdown"
             android:icon="@drawable/ic_lock">
             <intent-filter>
