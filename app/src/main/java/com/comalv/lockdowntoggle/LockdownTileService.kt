@@ -1,5 +1,7 @@
 package com.comalv.lockdowntoggle
 
+import android.annotation.SuppressLint
+import android.app.PendingIntent
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
@@ -22,6 +24,7 @@ class LockdownTileService : TileService() {
         qsTile.updateTile()
     }
 
+    @SuppressLint("StartActivityAndCollapseDeprecated")
     override fun onClick() {
         super.onClick()
 
@@ -32,7 +35,23 @@ class LockdownTileService : TileService() {
             policyManager.lockNow()
         } else {
             // Optionally show a toast or open the app
-            startActivityAndCollapse(packageManager.getLaunchIntentForPackage(packageName))
+            val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
+            if (launchIntent != null) {
+                if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.TIRAMISU) {
+                    // Android 13+ (API 33): Use PendingIntent
+                    val pendingIntent = PendingIntent.getActivity(
+                        this,
+                        0,
+                        launchIntent,
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                    )
+                    startActivityAndCollapse(pendingIntent)
+                } else {
+                    // Android 12 and below: Use direct Intent
+                    @Suppress("DEPRECATION")
+                    startActivityAndCollapse(launchIntent)
+                }
+            }
         }
     }
 }
