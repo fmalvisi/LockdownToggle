@@ -11,15 +11,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LockdownToggle"
         tools:targetApi="31">
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <receiver
             android:name=".LockReceiver"
             android:permission="android.permission.BIND_DEVICE_ADMIN"
@@ -41,6 +32,27 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
+        <activity
+            android:name=".QuickLockdownActivity"
+            android:exported="true"
+            android:enabled="true"
+            android:label="Quick Lockdown"
+            android:icon="@drawable/ic_lock">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:icon="@drawable/baseline_phonelink_lock_24"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
