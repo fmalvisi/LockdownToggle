@@ -9,4 +9,5 @@
     <string name="request_da_perm">Grant Device Administration Permessions</string>
     <string name="request_da_perm_desc">What does it do? It allows the Locdown mode intent to be triggered without shortcuts. Why is it needed? Lockdown mode is a safety feature that requires this permission to be invoked without using more vulnerable approaches (ie: a routine that uses Accessibility permissions).</string>
     <string name="request_da_perm_label">Request Admin Access</string>
+    <string name="quick_lockdown">Quick Lockdown</string>
 </resources>

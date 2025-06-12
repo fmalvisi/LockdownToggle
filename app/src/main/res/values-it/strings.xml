@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Lockdown Toggle</string>
+    <string name="test_lockdown">Test Attivazione Lockdown</string>
+    <string name="test_lockdown_desc">Premi questo bottone per innescare immediatamente la modalità Lockdown se hai già fornito i permessi necessario. Questo funziona esattamente come se cliccassi sull\'icona del menu a tendina.</string>
+    <string name="test_lockdown_label">Test Blocca Ora!</string>
+    <string name="revoke_da_perm">Revoca i Permessi di Gestione del Device</string>
+    <string name="revoke_da_perm_desc">Se non ti serve più la funzionalità di innescare velocemente il Lockdown, puoi rimuovere i privilegi necessari, cliccando il pulsante. Inoltre, se vuoi disinstallare questa applicazione, devi prima revocare questi privilegi</string>
+    <string name="revoke_da_perm_label">Rimuovi l\'accesso amministrativo</string>
+    <string name="request_da_perm">Concedi i Permessi di Gestione del Device</string>
+    <string name="request_da_perm_desc">Cosa fa? Permette l\'innesco della modalità Lockdown senza scorciatoie applicative. Perché sono necessari questi permessi? La modalità Lockdown è una funzionalità di sicurezza che richiede questi permessi per essere innescata direttamente. Altre modalità di innesco sono meno immediate e potrebbero essere meno sicure (ad esempio utilizzando i permessi di accessibilità come fanno altre app).</string>
+    <string name="request_da_perm_label">Richiedi l\'accesso amministrativo</string>
+    <string name="quick_lockdown">Attivazione Lockdown Immediata</string>
+</resources>
