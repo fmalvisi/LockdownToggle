@@ -11,29 +11,36 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : AppCompatActivity() {
 
-    private lateinit var policyManager: DevicePolicyManager
+
+class MainActivity : AppCompatActivity() {
+    companion object {
+        // Allows test code to override this to inject a mock
+        var adminControllerProvider: ((Context) -> AdminController)? = null
+    }
+    private lateinit var adminController: AdminController
     private lateinit var componentName: ComponentName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        policyManager = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
         componentName = ComponentName(this, LockReceiver::class.java)
+        adminController = adminControllerProvider?.invoke(this)
+            ?: RealAdminController(this, componentName)
 
         val requestAdminButton = findViewById<Button>(R.id.btn_request_admin)
         val lockNowButton = findViewById<Button>(R.id.btn_lock_now)
         val removeAdminButton = findViewById<Button>(R.id.btn_remove_admin)
         updateRemoveSectionVisibility()
         requestAdminButton.setOnClickListener {
-            val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
-            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName)
-            intent.putExtra(
-                DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                "To allow this app to lock the device down"
-            )
+            val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
+                putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName)
+                putExtra(
+                    DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                    "To allow this app to lock the device down"
+                )
+            }
             startActivity(intent)
 
             // Add quick tile
@@ -45,16 +52,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         lockNowButton.setOnClickListener {
-            if (policyManager.isAdminActive(componentName)) {
-                policyManager.lockNow()
+            if (adminController.isAdminActive()) {
+                adminController.lockNow()
             } else {
                 Toast.makeText(this, "Admin permission not granted", Toast.LENGTH_SHORT).show()
             }
         }
 
         removeAdminButton.setOnClickListener {
-            if (policyManager.isAdminActive(componentName)) {
-                policyManager.removeActiveAdmin(componentName)
+            if (adminController.isAdminActive()) {
+                adminController.removeAdmin()
                 Toast.makeText(this, "Admin rights removed", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "No admin rights to remove", Toast.LENGTH_SHORT).show()
@@ -70,7 +77,8 @@ class MainActivity : AppCompatActivity() {
     private fun updateRemoveSectionVisibility() {
         val requestAdminSection = findViewById<LinearLayout>(R.id.section_request_admin)
         val removeAdminSection = findViewById<LinearLayout>(R.id.section_revoke_admin)
-        if (policyManager.isAdminActive(componentName)) {
+
+        if (adminController.isAdminActive()) {
             removeAdminSection.visibility = View.VISIBLE
             requestAdminSection.visibility = View.GONE
         } else {

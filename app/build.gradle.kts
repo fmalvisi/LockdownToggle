@@ -16,6 +16,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
     }
 
     buildTypes {
@@ -110,9 +111,4 @@ dependencies {
 
     // For intent mocking/verification (optional but very useful)
     androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")
-
-    // For mocking (optional, but good for isolating components)
-    androidTestImplementation("org.mockito:mockito-android:4.0.0") // Or latest version
-    androidTestImplementation("org.mockito:mockito-core:4.0.0") // Or latest version
-    androidTestImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0") // For Kotlin niceties
 }

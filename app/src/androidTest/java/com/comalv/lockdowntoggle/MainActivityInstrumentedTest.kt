@@ -1,10 +1,8 @@
 package com.comalv.lockdowntoggle
 
-import android.app.Activity
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -20,10 +18,9 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.whenever
-import java.util.concurrent.CompletableFuture
+import io.mockk.mockk
+import io.mockk.every
+
 
 // A helper to replace the real DevicePolicyManager with a mock during tests
 // This is a simplified example. In a real app, you might use a proper DI framework
@@ -45,49 +42,44 @@ object TestDevicePolicyManagerHelper {
 
 @RunWith(AndroidJUnit4::class)
 class MainActivityInstrumentedTest {
-
+/*
     @get:Rule
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
-    private lateinit var mockDevicePolicyManager: DevicePolicyManager
     private lateinit var testContext: Context
     private lateinit var targetComponentName: ComponentName
+    lateinit var mockAdminController: AdminController
 
     @Before
     fun setUp() {
-        Intents.init() // Initialize Espresso-Intents
+        Intents.init()
 
         testContext = ApplicationProvider.getApplicationContext()
         targetComponentName = ComponentName(testContext, LockReceiver::class.java)
 
-        // --- Mocking DevicePolicyManager ---
-        // This is where it gets a bit complex without proper DI.
-        // For this example, let's assume you could somehow inject a mock or
-        // use a test-specific DPM provider.
-        // The `TestDevicePolicyManagerHelper` is a conceptual illustration.
-        // In a real scenario, you'd use Hilt, Koin, or manual constructor injection.
-
-        mockDevicePolicyManager = mock()
-        // If MainActivity could use a TestDevicePolicyManagerHelper:
-        // TestDevicePolicyManagerHelper.mockDevicePolicyManager = mockDevicePolicyManager
+        // Create and inject a mock DevicePolicyManager
+        mockAdminController = mockk<AdminController>(relaxed = true)
+        MainActivity.adminControllerProvider = { mockAdminController }
     }
 
     @After
     fun tearDown() {
-        Intents.release() // Release Espresso-Intents
-        // TestDevicePolicyManagerHelper.mockDevicePolicyManager = null // Clean up
+        Intents.release()
+        MainActivity.adminControllerProvider = null
+    }
+
+    @Test
+    fun sanityCheck_appLaunchesAndButtonVisible() {
+        onView(withId(R.id.btn_lock_now)).check(matches(isDisplayed()))
     }
 
     // --- Test Scenarios ---
-/*
+
     @Test
     fun whenAdminNotActive_showsRequestAdminSection() {
-        // ARRANGE: Ensure our mock DPM says admin is NOT active
-        // This requires MainActivity to use the mock.
-        // For this to work, MainActivity would need to be refactored to accept
-        // a DevicePolicyManager or use a service locator that can be controlled in tests.
-        // Let's simulate this by checking initial state, assuming DPM is not active by default on test start.
-        // This test might be flaky if admin is somehow active from a previous run on the test device.
+        every { mockAdminController.isAdminActive() } returns false
+
+        activityRule.scenario.recreate()
 
         activityRule.scenario.onActivity { activity ->
             // Simulate DPM returning false (requires MainActivity to use a mockable DPM)
@@ -108,7 +100,9 @@ class MainActivityInstrumentedTest {
     @Test
     fun clickRequestAdminButton_sendsCorrectIntent() {
         // ARRANGE: (Ensure admin is not active - relies on default state or previous test cleanup)
+        every { mockAdminController.isAdminActive() } returns false
 
+        activityRule.scenario.recreate()
         // ACT
         onView(withId(R.id.btn_request_admin)).perform(click())
 
@@ -132,30 +126,20 @@ class MainActivityInstrumentedTest {
 
     @Test
     fun whenAdminActive_showsRevokeAdminSection() {
-        // ARRANGE: This is the tricky part without direct DPM control in the Activity.
-        // We need to tell MainActivity that admin IS active.
-        // This typically involves mocking DevicePolicyManager and making MainActivity use the mock.
-        // For this example, we can't easily set this state from the test without modifying MainActivity
-        // to be more testable (e.g., by injecting DevicePolicyManager).
+        every { mockAdminController.isAdminActive() } returns true
 
-        // **Conceptual Mocking (if MainActivity used the mockDPM):**
-        // whenever(mockDevicePolicyManager.isAdminActive(targetComponentName)).doReturn(true)
-        // activityRule.scenario.recreate() // Recreate to pick up mocked state in onCreate/onResume
+        activityRule.scenario.recreate()
 
-        // Due to the difficulty of mocking DPM without refactoring MainActivity,
-        // this test might be better as a manual one, or you'd need to refactor MainActivity for testability.
-        // For now, let's skip the direct assertion or assume a way to set it.
-
-        // If you could set admin active (e.g., manually before running this specific test):
-        // onView(withId(R.id.section_request_admin)).check(matches(withEffectiveVisibility(Visibility.GONE)))
-        // onView(withId(R.id.section_revoke_admin)).check(matches(isDisplayed()))
-        // onView(withId(R.id.btn_remove_admin)).check(matches(isDisplayed()))
+        onView(withId(R.id.section_request_admin)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.section_revoke_admin)).check(matches(isDisplayed()))
+        onView(withId(R.id.btn_remove_admin)).check(matches(isDisplayed()))
     }
 
     @Test
     fun clickLockNowButton_whenAdminNotActive_showsToast() {
-        // ARRANGE: (Ensure admin is not active)
-        // Assuming MainActivity uses the real DPM and admin is not active by default.
+        every { mockAdminController.isAdminActive() } returns false
+
+        activityRule.scenario.recreate()
 
         // ACT
         onView(withId(R.id.btn_lock_now)).perform(click())
@@ -175,5 +159,5 @@ class MainActivityInstrumentedTest {
     // - clickRemoveAdminButton_whenAdminActive_callsRemoveActiveAdmin (requires mocking DPM)
     // - clickRemoveAdminButton_whenAdminNotActive_showsToast
 
- */
+*/
 }
