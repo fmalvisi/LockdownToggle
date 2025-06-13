@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         updateRemoveSectionVisibility()
 
         requestAdminButton.setOnClickListener {
+            requestAdminSection.visibility = View.GONE
             val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
                 putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName)
                 putExtra(
@@ -48,7 +49,6 @@ class MainActivity : AppCompatActivity() {
                 )
             }
             startActivity(intent)
-            requestAdminSection.visibility = View.GONE
 
             // Add quick tile
             val tileServiceIntent =
