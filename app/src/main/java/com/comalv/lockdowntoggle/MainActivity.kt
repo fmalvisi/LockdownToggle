@@ -5,6 +5,8 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
@@ -38,7 +40,7 @@ class MainActivity : AppCompatActivity() {
                 putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName)
                 putExtra(
                     DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                    "To allow this app to lock the device down"
+                    "To allow this app to enter Lockdown mode"
                 )
             }
             startActivity(intent)
@@ -49,6 +51,10 @@ class MainActivity : AppCompatActivity() {
                     component = ComponentName(this@MainActivity, LockdownTileService::class.java)
                 }
             startActivity(tileServiceIntent)
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                updateRemoveSectionVisibility()
+            }, 3000)
         }
 
         lockNowButton.setOnClickListener {
@@ -63,6 +69,9 @@ class MainActivity : AppCompatActivity() {
             if (adminController.isAdminActive()) {
                 adminController.removeAdmin()
                 Toast.makeText(this, "Admin rights removed", Toast.LENGTH_SHORT).show()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    updateRemoveSectionVisibility()
+                }, 3000)
             } else {
                 Toast.makeText(this, "No admin rights to remove", Toast.LENGTH_SHORT).show()
             }
