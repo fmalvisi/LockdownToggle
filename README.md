@@ -1,5 +1,7 @@
 # LockdownToggle
-## English
+## English (per l'Italiano scendere a metà pagina)
+
+source (if you're accessing from outside GitHub): https://github.com/fmalvisi/LockdownToggle
 
 ### What is Lockdown mode?
 
@@ -68,6 +70,8 @@ Since this app is free if you would like to donate it would be greatly appreciat
 | [![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/FMalvisi?country.x=IT&locale.x=en_US) |
 
 ## Italiano
+
+sorgenti (se si sta visualizzando questo documento al di fuori di GitHub): https://github.com/fmalvisi/LockdownToggle
 
 ### Cos'è la modalità Lockdown?
 
