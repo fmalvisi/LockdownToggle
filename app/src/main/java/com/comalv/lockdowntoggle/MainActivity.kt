@@ -34,7 +34,11 @@ class MainActivity : AppCompatActivity() {
         val requestAdminButton = findViewById<Button>(R.id.btn_request_admin)
         val lockNowButton = findViewById<Button>(R.id.btn_lock_now)
         val removeAdminButton = findViewById<Button>(R.id.btn_remove_admin)
+        val requestAdminSection = findViewById<LinearLayout>(R.id.section_request_admin)
+        val removeAdminSection = findViewById<LinearLayout>(R.id.section_revoke_admin)
+
         updateRemoveSectionVisibility()
+
         requestAdminButton.setOnClickListener {
             val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
                 putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName)
@@ -44,6 +48,7 @@ class MainActivity : AppCompatActivity() {
                 )
             }
             startActivity(intent)
+            requestAdminSection.visibility = View.GONE
 
             // Add quick tile
             val tileServiceIntent =
@@ -68,6 +73,7 @@ class MainActivity : AppCompatActivity() {
         removeAdminButton.setOnClickListener {
             if (adminController.isAdminActive()) {
                 adminController.removeAdmin()
+                removeAdminSection.visibility = View.GONE
                 Toast.makeText(this, "Admin rights removed", Toast.LENGTH_SHORT).show()
                 Handler(Looper.getMainLooper()).postDelayed({
                     updateRemoveSectionVisibility()
