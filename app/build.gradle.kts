@@ -27,10 +27,6 @@ android {
                 "proguard-rules.pro"
             )
         }
-        debug {
-            enableUnitTestCoverage = true
-            enableAndroidTestCoverage = true
-        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -55,6 +51,11 @@ android {
         }
     }
     testOptions {
+        packagingOptions {
+            jniLibs {
+                useLegacyPackaging = true
+            }
+        }
         unitTests {
             isIncludeAndroidResources = true
             isReturnDefaultValues = true
@@ -106,8 +107,8 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("io.mockk:mockk-android:1.13.11")
-    androidTestImplementation("androidx.test:runner:1.5.2")
-    androidTestImplementation("androidx.test:rules:1.5.0")
+    //androidTestImplementation("androidx.test:runner:1.5.2")
+    //androidTestImplementation("androidx.test:rules:1.5.0")
 
     // For intent mocking/verification (optional but very useful)
     androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")
