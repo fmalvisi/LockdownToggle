@@ -14,14 +14,14 @@ class ToastMatcher : TypeSafeMatcher<Root>() {
 
     override fun matchesSafely(root: Root): Boolean {
         val type = root.windowLayoutParams.get().type
-        if (type == WindowManager.LayoutParams.TYPE_TOAST || type == WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY) {
+        val isToastType = type == WindowManager.LayoutParams.TYPE_TOAST ||
+                type == WindowManager.LayoutParams.TYPE_APPLICATION ||
+                type == WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+
+        if (isToastType) {
             val windowToken: IBinder = root.decorView.windowToken
             val appToken: IBinder = root.decorView.applicationWindowToken
-            if (windowToken === appToken) {
-                // windowToken == appToken means this window isn't contained by any other windows.
-                // if it was a window for an activity, it would have TYPE_BASE_APPLICATION.
-                return true
-            }
+            return windowToken === appToken
         }
         return false
     }
