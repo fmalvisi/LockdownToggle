@@ -35,7 +35,7 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    packagingOptions {
+    packaging {
         // For AndroidTest resources
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}" // Common licenses to exclude
@@ -51,7 +51,7 @@ android {
         }
     }
     testOptions {
-        packagingOptions {
+        packaging {
             jniLibs {
                 useLegacyPackaging = true
             }
@@ -92,6 +92,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.junit.ktx)
+    implementation(libs.androidx.material3.android)
 
     testImplementation(libs.junit)
     testImplementation(libs.androidx.test.core)
